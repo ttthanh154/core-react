@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-family: 'Quicksand', sans-serif !important;
+}
+
+html {
+  font-size: 62.5% !important;
+}
+
+body {
+  // font-weight: 700;
+  // font-family: 'Quicksand', sans-serif ;
+  touch-action: manipulation;
+}
