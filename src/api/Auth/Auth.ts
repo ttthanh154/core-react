@@ -5,7 +5,7 @@ const version: string = import.meta.env.VITE_APP_VERSION_API;
 const apiUrl: string = `${version}/user/register`;
 const Auth = {
   register: (params: IRegisterFieldType) => {
-    return axiosCustomize.post(apiUrl, params);
+    return axiosCustomize.post<any,any>(apiUrl, params);
   },
 };
 

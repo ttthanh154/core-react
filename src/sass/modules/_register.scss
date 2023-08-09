@@ -1,3 +1,4 @@
+//Login and Register components' style use this register.scss file
 .register {
     height: 100%;
     width: 100%;
@@ -12,13 +13,14 @@
         align-items: center;
 
         .register__content-body {
-            max-height: 500px;
+            max-height: 700px;
             max-width: 600px;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
             border-radius: 6px;
             border: 1px solid $border-color;
             background-color: white;
-
+            text-align: center;
+            padding: 10px 0;
             h1 {
                 padding: 5px;
                 text-align: center;
@@ -35,7 +37,10 @@
                     width: 80%;
                 }
             }
-        }
 
+            #register__link, #login__link {
+                color: $blue-color;
+            }
+        }
     }
 }

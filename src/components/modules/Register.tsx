@@ -1,17 +1,22 @@
 import { Button, Form, Input } from "antd";
 import { IRegisterFieldType } from "../../interface/register";
-import { useEffect } from "react";
 import Auth from "@api/Auth/Auth";
-import { useAppDispatch } from "@utils/hook";
+import { funcUtils, useAppDispatch } from "@utils/hook";
 import { loading } from "@store/slice/globalSlice";
+import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (value: IRegisterFieldType) => {
     dispatch(loading(true));
     try {
       const userData: IRegisterFieldType = value;
-      const data = await Auth.register(userData);
+      const res = await Auth.register(userData);
+      if (res?._id) {
+        funcUtils.notify("Đăng ký tài khoản thành công", "success");
+        navigate('/')
+      }
       dispatch(loading(false));
     } catch (error) {
       dispatch(loading(false));
@@ -76,6 +81,13 @@ const Register = () => {
                 </Button>
               </Form.Item>
             </Form>
+            <b>Hoặc</b>
+            <div>
+              Chưa có tài khoản?{" "}
+              <Link to={"/login"}>
+                <span id="login__link">Đăng nhập</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
