@@ -1,15 +1,24 @@
 .register {
+    height: 100%;
+    width: 100%;
+
     .register__content {
         display: flex;
+        height: 100%;
+        width: 100%;
         justify-content: center;
         background-color: $main-color;
         padding: 50px;
+        align-items: center;
 
         .register__content-body {
+            max-height: 500px;
+            max-width: 600px;
             box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
             border-radius: 6px;
             border: 1px solid $border-color;
             background-color: white;
+
             h1 {
                 padding: 5px;
                 text-align: center;

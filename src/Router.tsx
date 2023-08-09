@@ -8,7 +8,6 @@ import Home from "./components/modules/Home";
 import Login from "./components/modules/Login";
 import AuthLayout from "./components/layout/AuthLayout";
 import Register from "./components/modules/Register";
-// import { Counter } from "./components/modules/Counter";
 
 const listRoute: RouteObject[] = [
   {

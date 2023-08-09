@@ -1,5 +1,5 @@
 export interface IRegisterFieldType {
-    fullname?: string;
+    fullName?: string;
     email?: string;
     password?: string;
     phone?: number;
