@@ -1,1 +1,1 @@
-export type {IRegisterFieldType} from './Register'
+export type {IRegisterFieldType, ILoginFieldType, IRegisterData} from './Register'

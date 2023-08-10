@@ -1,9 +1,9 @@
 import { Button, Form, Input } from "antd";
-import { IRegisterFieldType } from "../../interface/register";
-import Auth from "@api/Auth/Auth";
+import { IRegisterData, IRegisterFieldType } from "../../interface/register";
 import { funcUtils, useAppDispatch } from "@utils/hook";
 import { loading } from "@store/slice/globalSlice";
 import { Link, useNavigate } from "react-router-dom";
+import AuthApi from "@api/Auth/AuthApi";
 const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ const Register = () => {
     dispatch(loading(true));
     try {
       const userData: IRegisterFieldType = value;
-      const res = await Auth.register(userData);
-      if (res?._id) {
+      const {data} = await AuthApi.register(userData);
+      if (data?._id) {
         funcUtils.notify("Đăng ký tài khoản thành công", "success");
         navigate('/')
       }

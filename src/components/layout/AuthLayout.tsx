@@ -1,12 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Loading from "../common/Loading";
-import { useAppDispatch, useAppSelector } from "@utils/hook";
-import { useEffect } from "react";
+import { useAppSelector } from "@utils/hook";
 
 const AuthLayout = () => {
-  useEffect(() => {
-    
-  },[])
   return (
     <>
       <div className="layout-app">

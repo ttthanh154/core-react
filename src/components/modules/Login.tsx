@@ -1,22 +1,27 @@
 import { Button, Form, Input } from "antd";
-import { IRegisterFieldType } from "../../interface/register";
-import Auth from "@api/Auth/Auth";
+import { ILoginFieldType } from "../../interface/register";
+import AuthApi from "@api/Auth/AuthApi";
 import { funcUtils, useAppDispatch } from "@utils/hook";
 import { loading } from "@store/slice/globalSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { login } from "@store/slice/userSlice";
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (value: IRegisterFieldType) => {
+  const handleSubmit = async (value: ILoginFieldType) => {
     dispatch(loading(true));
     try {
-      const userData: IRegisterFieldType = value;
-      const res = await Auth.register(userData);
-      if (res?.data?._id) {
+      const userData: ILoginFieldType = value;
+      const {data} = await AuthApi.login(userData);
+      console.log("LOGIN: ", data);
+      if (data?.access_token) {
+        localStorage.setItem('access_token',data.access_token);
+        dispatch(login(data.user));
         funcUtils.notify("Đăng nhập tài khoản thành công", "success");
-        dispatch(loading(false));
+        navigate('/');
       }
+        dispatch(loading(false));
     } catch (error) {
       dispatch(loading(false));
     }
@@ -36,16 +41,16 @@ const Login = () => {
               onFinish={handleSubmit}
               autoComplete="off"
             >
-              <Form.Item<IRegisterFieldType>
-                label="Email"
-                name="email"
-                rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+              <Form.Item<ILoginFieldType>
+                label="Tài khoản"
+                name="username"
+                rules={[{ required: true, message: "Vui lòng nhập tên tài khoản" }]}
                 className="form-input"
               >
                 <Input />
               </Form.Item>
 
-              <Form.Item<IRegisterFieldType>
+              <Form.Item<ILoginFieldType>
                 label="Mật khẩu"
                 name="password"
                 rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}

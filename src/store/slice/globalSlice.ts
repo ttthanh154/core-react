@@ -1,17 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface CounterState {
+export interface LoadingState {
   loading: boolean;
 }
 
-const initialState: CounterState = {
+const initialState: LoadingState = {
   loading: false,
 };
 
 export const globalSlice = createSlice({
   name: "global",
-  initialState,
+  initialState: initialState,
   reducers: {
     loading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
