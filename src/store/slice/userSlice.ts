@@ -1,5 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserDetail {
   email: string;
@@ -11,10 +10,12 @@ export interface UserDetail {
 }
 
 export interface UserState {
+  isAuthenticated: boolean;
   user: UserDetail;
 }
 
 const initialState: UserState = {
+  isAuthenticated: false,
   user: {
     email: "",
     phone: "",
@@ -30,15 +31,24 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, action: PayloadAction<UserDetail>) => {
+      state.isAuthenticated = true;
       state.user = action.payload;
     },
     fetchAccount: (state, action: PayloadAction<UserDetail>) => {
+      state.isAuthenticated = true;
       state.user = action.payload;
+    },
+    logout: (state) => {
+      localStorage.clear();
+      state.isAuthenticated = false;
+      Object.values(state.user).forEach((key: string) => {
+        key = "";
+      });
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login, fetchAccount } = userSlice.actions;
+export const { login, fetchAccount, logout } = userSlice.actions;
 
 export default userSlice.reducer;

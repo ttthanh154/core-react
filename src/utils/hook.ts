@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 // Use throughout your app instead of plain `useDispatch` and `useSelector`
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+import { AxiosRequestConfig } from "axios";
 
 //Util function
 
@@ -37,6 +38,15 @@ const funcUtils = {
       default:
         break;
     }
+  },
+  AuthHeader: () => {
+    const token = localStorage.getItem("access_token");
+    const authHeader = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return authHeader;
   },
 };
 

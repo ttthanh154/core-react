@@ -13,15 +13,18 @@ const Login = () => {
     dispatch(loading(true));
     try {
       const userData: ILoginFieldType = value;
-      const {data} = await AuthApi.login(userData);
+      const { data } = await AuthApi.login(userData);
       console.log("LOGIN: ", data);
       if (data?.access_token) {
-        localStorage.setItem('access_token',data.access_token);
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("role", data.user.role);
         dispatch(login(data.user));
+        const userRole = localStorage.getItem("role");
+        userRole === "ADMIN" ? navigate("/admin") : navigate("/");
+
         funcUtils.notify("Đăng nhập tài khoản thành công", "success");
-        navigate('/');
       }
-        dispatch(loading(false));
+      dispatch(loading(false));
     } catch (error) {
       dispatch(loading(false));
     }
@@ -44,7 +47,9 @@ const Login = () => {
               <Form.Item<ILoginFieldType>
                 label="Tài khoản"
                 name="username"
-                rules={[{ required: true, message: "Vui lòng nhập tên tài khoản" }]}
+                rules={[
+                  { required: true, message: "Vui lòng nhập tên tài khoản" },
+                ]}
                 className="form-input"
               >
                 <Input />

@@ -1,8 +1,22 @@
+//color options
+$blue-color: #5bc0de;
+$black-color: #000000;
+
+//schema
 $main-color: #F5F5FA;
+$sub-color-1: #1677FF;
 
 $btn-bg: $main-color;
 
-$border-color: #cdcdcd;
+//text
+$txt-color: $main-color;
+$txt-color-1: $black-color;
 
-//color options
-$blue-color: #5bc0de;
+//border
+$border-color: #cdcdcd;
+$border-color-1: $black-color;
+
+//button
+$btn-color: $sub-color-1;
+
+

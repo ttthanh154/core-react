@@ -1,11 +1,30 @@
-.active{
-    color: red;
-}
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 25px;
 
-.inactive{
-    color: blue;
-}
+    .header__container-logo {
 
-.pending{
-    color: purple
+    }
+
+    .header__container-searchBar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+        .searchBar {
+            padding-top: 25px;
+            width: 500px;
+        }
+
+        .cart-management {
+            padding: 0 10px;
+        }
+    }
+
+    .header__container-account {
+
+    }
 }
