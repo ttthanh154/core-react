@@ -1,5 +1,5 @@
 import { Button, Form, Input } from "antd";
-import { IRegisterData, IRegisterFieldType } from "../../interface/register";
+import { IRegisterFieldType } from "../../interface/register";
 import { funcUtils, useAppDispatch } from "@utils/hook";
 import { loading } from "@store/slice/globalSlice";
 import { Link, useNavigate } from "react-router-dom";

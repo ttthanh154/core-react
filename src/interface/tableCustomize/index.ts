@@ -1,0 +1,1 @@
+export type {ICustomTableProps,IMetaResponse, ICustomPagination} from './tableCustomize'

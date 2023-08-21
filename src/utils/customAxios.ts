@@ -37,13 +37,13 @@ instance.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log(">>>axios res: ", response.data);
+    // console.log(">>>axios res: ", response.data);
     return response?.data ?? response;
   },
   async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    console.log(error?.response?.data);
+    // console.log(error?.response?.data);
 
     let message = "";
     let statusCode = error?.response?.data?.statusCode;

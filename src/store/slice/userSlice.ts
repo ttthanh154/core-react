@@ -41,9 +41,14 @@ export const userSlice = createSlice({
     logout: (state) => {
       localStorage.clear();
       state.isAuthenticated = false;
-      Object.values(state.user).forEach((key: string) => {
-        key = "";
-      });
+      state.user = {
+        email: "",
+        phone: "",
+        fullName: "",
+        role: "",
+        avatar: "",
+        id: "",
+      };
     },
   },
 });

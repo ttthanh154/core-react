@@ -12,6 +12,7 @@ import Admin from "./components/modules/Admin";
 import AdminRoute from "./components/common/AdminRoute";
 import AdminLayout from "./components/layout/AdminLayout";
 import UserLayout from "./components/layout/UserLayout";
+import User from "./components/modules/User";
 const userRole = localStorage.getItem("role");
 const listRoute: RouteObject[] = [
   {
@@ -32,7 +33,7 @@ const listRoute: RouteObject[] = [
 
   {
     element: userRole === "ADMIN" ? <AdminLayout /> : <UserLayout />,
-    path: userRole === "ADMIN" ? "/admin/" : "/",
+    path: userRole === "ADMIN" ? "/admin/*" : "/",
     errorElement: <NotFound />,
     children: [
       {
@@ -65,6 +66,16 @@ const listRoute: RouteObject[] = [
           <PrivateRoute>
             <AdminRoute>
               <Admin />
+            </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "user",
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <User />
             </AdminRoute>
           </PrivateRoute>
         ),
