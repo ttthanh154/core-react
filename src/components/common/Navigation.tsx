@@ -31,7 +31,7 @@ const Navigation = (props: any) => {
   const { Content, Footer, Sider } = Layout;
 
   const items: MenuItem[] = [
-    getItem(<Link to={"/admin"}>Dashboard</Link>, "1", <PieChartOutlined />),
+    getItem(<Link to={"/"}>Dashboard</Link>, "1", <PieChartOutlined />),
     getItem("Manage Users", "sub1", <UserOutlined />, [
       getItem("Tom", "2"),
       getItem("Bill", "3"),

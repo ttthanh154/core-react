@@ -1,3 +1,4 @@
+import { IUser } from "@interface/user";
 import type { ColumnsType } from "antd/es/table";
 
 export interface ICustomTableProps {
@@ -6,6 +7,9 @@ export interface ICustomTableProps {
   onChange?: any;
   meta?: IMetaResponse;
   isLoading: boolean;
+  searchData?: any;
+  detailData: IUser;
+  onToggleDrawer: () => void;
 }
 
 export interface IMetaResponse {

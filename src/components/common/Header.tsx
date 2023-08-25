@@ -11,38 +11,48 @@ import { Avatar, Badge, Dropdown, Form, Input, Popover, Space } from "antd";
 import type { MenuProps } from "antd";
 
 import { useForm } from "antd/es/form/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
   const username = useAppSelector((state) => state.user.user.fullName);
+  const userRole = useAppSelector((state) => state.user.user.role);
+  const userAvatar = useAppSelector((state) => state.user.user.avatar);
   const [form] = useForm();
   const dispatch = useAppDispatch();
   const handleLogout = async () => {
     dispatch(loading(true));
     try {
-      const res = await AuthApi.logout();
-      console.log(res);
-      if(res?.statusCode === 201){
-        dispatch(logout())
-      }
+      dispatch(logout());
+      navigate("/login");
       dispatch(loading(false));
     } catch (error) {
-      dispatch(loading(false))
+      dispatch(loading(false));
     }
-  }
-  const items: MenuProps["items"] = [
+  };
+  let items: MenuProps["items"] = [
     {
-      label: <Link to='/changePassword'>Đổi mật khẩu</Link>,
-      key: "0",
+      label: <Link to="/changePassword">Quản lý tài khoản</Link>,
+      key: "password",
     },
-
     {
       type: "divider",
     },
     {
       label: <p onClick={handleLogout}>Đăng xuất</p>,
-      key: "1",
+      key: "logout",
     },
   ];
+
+  userRole === "ADMIN"
+    ? items.unshift({
+        label: <Link to="/admin">Trang quản trị</Link>,
+        key: "admin",
+      })
+    : null;
+
+  const urlAvatar = `${
+    import.meta.env.VITE_BACKEND_API
+  }/images/avatar/${userAvatar}`;
 
   return (
     <>
@@ -80,6 +90,7 @@ const Header = () => {
           <Dropdown menu={{ items }} trigger={["click"]} className="">
             <a onClick={(e) => e.preventDefault()}>
               <Space>
+                <Avatar src={urlAvatar} />
                 <span>{username}</span>
                 <DownOutlined />
               </Space>

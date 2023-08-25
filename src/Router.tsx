@@ -10,10 +10,8 @@ import Register from "./components/modules/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
 import Admin from "./components/modules/Admin";
 import AdminRoute from "./components/common/AdminRoute";
-import AdminLayout from "./components/layout/AdminLayout";
 import UserLayout from "./components/layout/UserLayout";
-import User from "./components/modules/User";
-const userRole = localStorage.getItem("role");
+import User from "./components/modules/User/User";
 const listRoute: RouteObject[] = [
   {
     element: <AuthLayout />,
@@ -32,10 +30,11 @@ const listRoute: RouteObject[] = [
   },
 
   {
-    element: userRole === "ADMIN" ? <AdminLayout /> : <UserLayout />,
-    path: userRole === "ADMIN" ? "/admin/*" : "/",
+    element: <UserLayout />,
+    path:  "/",
     errorElement: <NotFound />,
     children: [
+      //User
       {
         index: true,
         element: (
@@ -60,6 +59,7 @@ const listRoute: RouteObject[] = [
           </PrivateRoute>
         ),
       },
+      //Admin
       {
         path: "admin",
         element: (

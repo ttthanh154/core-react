@@ -14,8 +14,8 @@ const UserLayout = () => {
   const token = localStorage.getItem("access_token");
 
   const getAccount = async () => {
-    dispatch(loading(true));
     if (token) {
+      dispatch(loading(true));
       try {
         const res = await AuthApi.fetchAccount();
         dispatch(fetchAccount(res.data.user));
@@ -23,7 +23,8 @@ const UserLayout = () => {
       } catch (error) {
         dispatch(loading(false));
       }
-    } else {
+    }
+     else {
       navigate("/login");
       dispatch(loading(false));
     }
@@ -36,13 +37,15 @@ const UserLayout = () => {
   return (
     <>
       <div className="layout-app">
-        {useAppSelector((state) => state.global.loading) ? (
+        { useAppSelector((state) => state.global.loading) && (
           <>
             <div className="layout-app__content">
               <Loading />
             </div>
           </>
-        ) : (
+        )}
+        
+        {token &&(
           <>
             <div className="layout-app__content">
               <div className="layout-app__content-showing">

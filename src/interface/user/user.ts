@@ -12,9 +12,17 @@ export interface IUser {
 }
 
 export interface IUserDataType {
-  key: React.Key;
+  key?: React.Key;
   _id: string;
   fullName: number;
   email: number;
   phone: number;
 }
+
+
+export interface IUserFieldType  {
+  fullName?: string;
+  password?: string;
+  email?: string;
+  phone?: string;
+};

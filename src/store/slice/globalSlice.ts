@@ -3,12 +3,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface LoadingState {
   loading: boolean;
-  page: { pageSize: number, current: number },
+  page: { pageSize: number; current: number };
+  active: boolean;
 }
 
 const initialState: LoadingState = {
   loading: false,
   page: { pageSize: 10, current: 1 },
+  active: false,
 };
 
 export const globalSlice = createSlice({
@@ -22,10 +24,16 @@ export const globalSlice = createSlice({
       state.page.pageSize = action.payload.pageSize;
       state.page.current = action.payload.currentPage;
     },
+    resetPage: (state) => {
+      state.page.current = 1;
+    },
+    active: (state, action: PayloadAction<boolean>) => {
+      state.active = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loading,savePage } = globalSlice.actions;
+export const { loading, savePage, resetPage, active } = globalSlice.actions;
 
 export default globalSlice.reducer;
