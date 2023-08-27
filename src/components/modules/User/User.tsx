@@ -18,7 +18,7 @@ const User = () => {
   const [detailId, setDetailId] = useState<any>();
   const dispatch = useAppDispatch();
   const isActive = useAppSelector((state) => state.global.active);
-
+  const reload = useAppSelector((state) => state.global.reload)
   const handleSearchData = (data: any) => {
     setDataSearch(data);
   };
@@ -109,7 +109,7 @@ const User = () => {
 
   useEffect(() => {
     getUsers();
-  }, [page, dataSearch]);
+  }, [page, dataSearch, reload]);
 
   return (
     <>

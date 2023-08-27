@@ -5,12 +5,14 @@ export interface LoadingState {
   loading: boolean;
   page: { pageSize: number; current: number };
   active: boolean;
+  reload: boolean;
 }
 
 const initialState: LoadingState = {
   loading: false,
   page: { pageSize: 10, current: 1 },
   active: false,
+  reload: false,
 };
 
 export const globalSlice = createSlice({
@@ -30,10 +32,13 @@ export const globalSlice = createSlice({
     active: (state, action: PayloadAction<boolean>) => {
       state.active = action.payload;
     },
+    reload:  (state, action: PayloadAction<boolean>) => {
+      state.reload = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { loading, savePage, resetPage, active } = globalSlice.actions;
+export const { loading, savePage, resetPage, active, reload } = globalSlice.actions;
 
 export default globalSlice.reducer;

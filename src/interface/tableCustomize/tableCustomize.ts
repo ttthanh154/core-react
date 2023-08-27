@@ -23,3 +23,7 @@ export interface ICustomPagination {
   change?: (page: number) => void;
   meta?: IMetaResponse;
 }
+
+export interface ICustomTypeModal {
+  type: string;
+}

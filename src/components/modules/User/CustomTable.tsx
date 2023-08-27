@@ -3,10 +3,11 @@ import { Button, Space, Table } from "antd";
 import CustomPagination from "./CustomPagination";
 import SearchBox from "./SearchBox";
 import CustomDrawer from "./CustomDrawer";
-import CustomModal from "./CustomModal";
 import { useState } from "react";
+import CustomModal from "./CustomModal";
 
 const CustomTable = (props: ICustomTableProps) => {
+
   const {
     columns,
     dataSource,
@@ -19,13 +20,13 @@ const CustomTable = (props: ICustomTableProps) => {
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
+  const [type, setType] = useState('')
+  const showModal = (type: string) => {
+    setType(type)
     setIsModalOpen(true);
   };
 
   const handleCancel = () => {
-    console.log('Cancle OK')
     setIsModalOpen(false);
   };
 
@@ -38,10 +39,10 @@ const CustomTable = (props: ICustomTableProps) => {
             <Button type="primary" className="btn-export">
               Xuất file
             </Button>
-            <Button type="primary" className="btn-import">
+            <Button type="primary" className="btn-import" onClick={() => showModal('upload')}>
               Nhập file
             </Button>
-            <Button type="primary" className="btn-add" onClick={showModal}>
+            <Button type="primary" className="btn-add" onClick={() => showModal('addNew')}>
               Thêm mới
             </Button>
           </Space>
@@ -69,6 +70,7 @@ const CustomTable = (props: ICustomTableProps) => {
         <CustomModal
           isModalOpen={isModalOpen}
           handleCancel={handleCancel}
+          type={type}
         />
       </div>
     </>
