@@ -32,15 +32,16 @@ const Navigation = (props: any) => {
 
   const items: MenuItem[] = [
     getItem(<Link to={"/"}>Dashboard</Link>, "1", <PieChartOutlined />),
-    getItem("Manage Users", "sub1", <UserOutlined />, [
-      getItem("Tom", "2"),
-      getItem("Bill", "3"),
-      getItem("Alex", "4"),
-    ]),
-    getItem("Manage Books", "sub2", <DesktopOutlined />, [
-      getItem("Team 1", "5"),
-      getItem("Team 2", "6"),
-    ]),
+    getItem(<Link to={"/user"}>Manage Users</Link>, "sub1", <UserOutlined />),
+    getItem(
+      <Link to={"book"}>Manage Books</Link>,
+      "sub2",
+      <DesktopOutlined />,
+      [
+        getItem("Team 1", "5"),
+        // getItem("Team 2", "6"),
+      ]
+    ),
     getItem("Manage Orders", "7", <FileOutlined />),
   ];
 

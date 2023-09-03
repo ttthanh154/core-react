@@ -10,6 +10,11 @@ export interface ICustomTableProps {
   searchData?: any;
   detailData: IUser;
   onToggleDrawer: () => void;
+  showModal: any;
+  isModalOpen: boolean;
+  type: string;
+  handleCancel: () => void;
+  labelName: any;
 }
 
 export interface IMetaResponse {
@@ -26,4 +31,11 @@ export interface ICustomPagination {
 
 export interface ICustomTypeModal {
   type: string;
+}
+
+export interface ICustomSearchBox {
+  label:  string;
+  name: string;
+  rules?: any;
+  inputType?: string;
 }

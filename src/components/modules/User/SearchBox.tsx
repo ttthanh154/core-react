@@ -1,8 +1,40 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, InputNumber } from "antd";
 import { resetPage } from "@store/slice/globalSlice";
 import { useAppDispatch } from "@utils/hook";
+import { ICustomSearchBox } from "@interface/tableCustomize";
 
-const SearchBox = ({ searchData }: any) => {
+const SearchBox = ({ searchData, labelName }: any) => {
+  const [form] = Form.useForm()
+  // console.log(labelName)
+  
+  const renderFields = () => {
+    return labelName.map((field: ICustomSearchBox) => {
+      let inputComponent;
+  
+      switch (field.inputType) {
+        case "number":
+          inputComponent = <InputNumber />;
+          break;
+        // Add more cases for different input types if needed
+        default:
+          inputComponent = <Input />;
+          break;
+      }
+  
+      return (
+        <Form.Item
+          label={field.label}
+          name={field.name}
+          rules={field?.rules ? field?.rules[0] : undefined}
+          key={field.name}
+        >
+          {inputComponent}
+        </Form.Item>
+      );
+    });
+  };
+  
+
   const dispatch = useAppDispatch();
 
   const onFinish = (values: any) => {
@@ -21,32 +53,16 @@ const SearchBox = ({ searchData }: any) => {
     <>
       <div className="searchBox">
         <Form
+        form={form}
           name="basic"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <div className="searchBox__field">
-            <Form.Item label="Tên hiển thị" name="fullName">
-              <Input />
-            </Form.Item>
-
-            <Form.Item label="Email" name="email">
-              <Input />
-            </Form.Item>
-
-            <Form.Item
-              label="Số điện thoại"
-              name="phone"
-              rules={[
-                {
-                  pattern: /^[0-9]+$/,
-                  message: "Vui lòng chỉ nhập số",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            {
+              renderFields()
+            }
           </div>
 
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

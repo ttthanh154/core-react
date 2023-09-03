@@ -21,6 +21,7 @@ export interface IUserDataType {
 
 
 export interface IUserFieldType  {
+  _id?: string;
   fullName?: string;
   password?: string;
   email?: string;

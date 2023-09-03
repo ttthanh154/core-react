@@ -1,20 +1,56 @@
 import { InboxOutlined } from "@ant-design/icons";
 import UserManagementApi from "@api/Admin/UserManagement/UserManagementApi";
-import { FieldType } from "@interface/user";
+import { IUserFieldType, IUserDataType } from "@interface/user";
 import { reload } from "@store/slice/globalSlice";
-import { useAppDispatch, useAppSelector } from "@utils/hook";
-import { Form, Input, Modal, UploadProps, message } from "antd";
+import { funcUtils, useAppDispatch, useAppSelector } from "@utils/hook";
+import { Form, Input, Modal, Table, UploadProps, message } from "antd";
+import { ColumnsType } from "antd/es/table";
 import Dragger from "antd/es/upload/Dragger";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
-const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
+import templateSample from "./Mẫu dữ liệu.xlsx?url";
+const CustomModal = ({
+  isModalOpen,
+  handleCancel,
+  type,
+  detailData,
+  columns,
+}: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
   const toggle = useAppSelector((state) => state.global.reload);
-  const [excelData, setExcelData] = useState<any>();
+  const [excelData, setExcelData] = useState<any>([]);
 
-  const handleFinishAddModal = async (values: any) => {
+  // console.log("Modal::: ", type);
+
+  useEffect(() => {
+    if (detailData) {
+      form.setFieldsValue(detailData);
+    }
+  }, [type]);
+
+  // const columns: ColumnsType<IUserDataType> = [
+  //   {
+  //     title: "Tên hiển thị",
+  //     dataIndex: "fullName",
+  //   },
+  //   {
+  //     title: "Email",
+  //     dataIndex: "email",
+  //   },
+  //   {
+  //     title: "Số điện thoại",
+  //     dataIndex: "phone",
+  //   },
+  // ];
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  //For handle adding a single user
+  const handleFinishAddModal = async (values: IUserFieldType) => {
     const data = { ...values };
     setIsLoading(true);
     try {
@@ -26,19 +62,25 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
       dispatch(reload(!toggle));
       handleCancel();
     } catch (error) {
-      console.log(error);
       setIsLoading(false);
     }
   };
 
-  const handleFinishUploadModal = async () => {
-    console.log("Upload");
+  const handleFinishEditModal = async (values: IUserFieldType) => {
+    setIsLoading(true);
+    try {
+      const res = await UserManagementApi.updateAUser(values);
+      console.log("???: ", res);
+      setIsLoading(false);
+      form.resetFields();
+      funcUtils.notify(`Cập nhật thành công!`, "success");
+      dispatch(reload(!toggle));
+      handleCancel();
+    } catch (error) {
+      setIsLoading(false);
+    }
   };
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  };
-
+  //For the import feature
   const dummyRequest = ({ file, onSuccess }: any) => {
     setTimeout(() => {
       onSuccess("Ok");
@@ -53,7 +95,6 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
     accept:
       ".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
     onChange(info: any) {
-      console.log(">>>info: ", info);
       const { status } = info.file;
       if (status !== "uploading") {
         console.log(info.file, info.fileList);
@@ -62,21 +103,24 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
         if (info.fileList && info.fileList.length > 0) {
           const file = info.fileList[0].originFileObj;
           const reader = new FileReader();
-          console.log(">>>check file: ", file);
           reader.readAsArrayBuffer(file);
           reader.onload = (e: any) => {
             const data = new Uint8Array(reader.result as ArrayBufferLike);
             const workbook = XLSX.read(data, { type: "array" });
             const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-            const jsonData = XLSX.utils.sheet_to_json(sheet, {
+            const jsonData: IUserFieldType[] = XLSX.utils.sheet_to_json(sheet, {
               header: ["fullName", "email", "phone"],
               range: 1,
             });
+            console.log(">>>check jsonData: ", jsonData);
 
-            if (jsonData && jsonData.length > 0) {
-              console.log(jsonData);
-              setExcelData(jsonData);
+            if (jsonData?.length > 0) {
+              const result = jsonData.map((item: IUserFieldType) => ({
+                ...item,
+                password: "123456",
+              }));
+              setExcelData(result);
             }
           };
         }
@@ -91,6 +135,23 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
     },
   };
 
+  const handleFinishUploadModal = async () => {
+    setIsLoading(true);
+    try {
+      const res = await UserManagementApi.createAUserList(excelData);
+      console.log("check res::: ", res);
+      funcUtils.notify(
+        `Thành công: ${res.data.countSuccess}  Thất bại: ${res.data.countError}`,
+        res.data.countError > 0 ? "warning" : "success"
+      );
+      setExcelData([]);
+      handleCancel();
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
   const renderModalComponent = () => {
     switch (type) {
       case "addNew":
@@ -99,7 +160,10 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
             title="Thêm mới người dùng"
             open={isModalOpen}
             onOk={() => form.submit()}
-            onCancel={handleCancel}
+            onCancel={() => {
+              form.resetFields();
+              handleCancel();
+            }}
             okText={"Tạo mới"}
             cancelText={"Hủy"}
             confirmLoading={isLoading}
@@ -115,7 +179,7 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
-              <Form.Item<FieldType>
+              <Form.Item<IUserFieldType>
                 label="Họ tên"
                 name="fullName"
                 rules={[
@@ -125,7 +189,7 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
                 <Input />
               </Form.Item>
 
-              <Form.Item<FieldType>
+              <Form.Item<IUserFieldType>
                 label="Mật khẩu"
                 name="password"
                 rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
@@ -133,7 +197,7 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
                 <Input.Password />
               </Form.Item>
 
-              <Form.Item<FieldType>
+              <Form.Item<IUserFieldType>
                 label="Email"
                 name="email"
                 rules={[{ required: true, message: "Vui lòng nhập email!" }]}
@@ -141,7 +205,65 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
                 <Input />
               </Form.Item>
 
-              <Form.Item<FieldType>
+              <Form.Item<IUserFieldType>
+                label="Số điện thoại"
+                name="phone"
+                rules={[
+                  { required: true, message: "Vui lòng nhập số điện thoại!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Form>
+          </Modal>
+        );
+      case "edit":
+        return (
+          <Modal
+            title="Cập nhật người dùng"
+            open={isModalOpen}
+            onOk={() => form.submit()}
+            onCancel={() => {
+              form.resetFields();
+              handleCancel();
+            }}
+            okText={"Tạo mới"}
+            cancelText={"Hủy"}
+            confirmLoading={isLoading}
+          >
+            <Form
+              form={form}
+              name="formAddUser"
+              labelCol={{ span: 8 }}
+              wrapperCol={{ span: 16 }}
+              style={{ maxWidth: 600 }}
+              initialValues={{ remember: false }}
+              onFinish={handleFinishEditModal}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item<IUserFieldType> label="ID" name="_id" hidden={true}>
+                <Input />
+              </Form.Item>
+              <Form.Item<IUserFieldType>
+                label="Họ tên"
+                name="fullName"
+                rules={[
+                  { required: true, message: "Vui lòng nhập họ tên đầy đủ!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+
+              <Form.Item<IUserFieldType>
+                label="Email"
+                name="email"
+                rules={[{ required: true, message: "Vui lòng nhập email!" }]}
+              >
+                <Input disabled={true} />
+              </Form.Item>
+
+              <Form.Item<IUserFieldType>
                 label="Số điện thoại"
                 name="phone"
                 rules={[
@@ -154,30 +276,56 @@ const CustomModal = ({ isModalOpen, handleCancel, type }: any) => {
           </Modal>
         );
       case "upload":
+        const filteredColumns = columns.filter((column:any) => column.key !== 'action');
         return (
           <Modal
-            title="Thêm mới người dùng"
+            title="Thêm file"
             open={isModalOpen}
             onOk={() => handleFinishUploadModal()}
-            onCancel={handleCancel}
+            onCancel={() => {
+              setExcelData([]);
+              handleCancel();
+            }}
             okText={"Tạo mới"}
             cancelText={"Hủy"}
             confirmLoading={isLoading}
+            maskClosable={false}
+            okButtonProps={{
+              disabled: excelData?.length < 1,
+              loading: isLoading,
+            }}
           >
-            <Dragger {...props}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">
-                Click or drag file to this area to upload
-              </p>
-              <p className="ant-upload-hint">
-                Support for a single or bulk upload. Strictly prohibited from
-                uploading company data or other banned files.
-              </p>
-            </Dragger>
+            <div style={{ overflow: "auto" }}>
+              <Dragger {...props}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  Support for a single or bulk upload. Strictly prohibited from
+                  uploading company data or other banned files.
+                  <a
+                    href={templateSample}
+                    download
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <i>&nbsp; Tải bản mẫu</i>
+                  </a>
+                </p>
+              </Dragger>
+              <Table
+                columns={filteredColumns}
+                dataSource={excelData}
+                pagination={false}
+                rowKey={(record) => record.email}
+                loading={isLoading}
+              />
+            </div>
           </Modal>
         );
+
       default:
         break;
     }

@@ -3,11 +3,9 @@ import { Button, Space, Table } from "antd";
 import CustomPagination from "./CustomPagination";
 import SearchBox from "./SearchBox";
 import CustomDrawer from "./CustomDrawer";
-import { useState } from "react";
 import CustomModal from "./CustomModal";
-
+import * as XLSX from "xlsx";
 const CustomTable = (props: ICustomTableProps) => {
-
   const {
     columns,
     dataSource,
@@ -17,18 +15,27 @@ const CustomTable = (props: ICustomTableProps) => {
     searchData,
     detailData,
     onToggleDrawer,
+    showModal,
+    isModalOpen, 
+    type,
+    handleCancel,
+    labelName
   } = props;
+  
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [type, setType] = useState('')
-  const showModal = (type: string) => {
-    setType(type)
-    setIsModalOpen(true);
+
+  // console.log(labelName)
+
+  const handleExport = (data: any[]) => {
+    if (data.length > 1) {
+      const worksheet = XLSX.utils.json_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, "DataSheet.xlsx");
+    }
   };
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  
 
   const renderHeader = () => {
     return (
@@ -36,13 +43,25 @@ const CustomTable = (props: ICustomTableProps) => {
         <div className="table__header-title">
           <span>Danh sách người dùng</span>
           <Space>
-            <Button type="primary" className="btn-export">
+            <Button
+              type="primary"
+              className="btn-export"
+              onClick={() => handleExport(dataSource)}
+            >
               Xuất file
             </Button>
-            <Button type="primary" className="btn-import" onClick={() => showModal('upload')}>
+            <Button
+              type="primary"
+              className="btn-import"
+              onClick={() => showModal("upload")}
+            >
               Nhập file
             </Button>
-            <Button type="primary" className="btn-add" onClick={() => showModal('addNew')}>
+            <Button
+              type="primary"
+              className="btn-add"
+              onClick={() => showModal("addNew")}
+            >
               Thêm mới
             </Button>
           </Space>
@@ -54,7 +73,7 @@ const CustomTable = (props: ICustomTableProps) => {
   return (
     <>
       <div className="customTable">
-        <SearchBox searchData={searchData} />
+        <SearchBox searchData={searchData} labelName={labelName}/>
         <CustomDrawer data={detailData} onToggleDrawer={onToggleDrawer} />
 
         <Table
@@ -71,6 +90,8 @@ const CustomTable = (props: ICustomTableProps) => {
           isModalOpen={isModalOpen}
           handleCancel={handleCancel}
           type={type}
+          detailData={detailData}
+          columns={columns}
         />
       </div>
     </>

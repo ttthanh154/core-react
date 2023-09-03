@@ -1,1 +1,1 @@
-export type {IUser, IUserDataType, FieldType} from './user'
+export type {IUser, IUserDataType, IUserFieldType} from './user'

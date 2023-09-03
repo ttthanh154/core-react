@@ -1,19 +1,21 @@
 import { ColumnsType, TableProps } from "antd/es/table";
-import CustomTable from "./CustomTable";
+import CustomTable from "../User/CustomTable";
 import { useState, useEffect } from "react";
-import UserManagementApi from "@api/Admin/UserManagement/UserManagementApi";
 import { funcUtils, useAppDispatch, useAppSelector } from "@utils/hook";
 import { IUser, IUserDataType } from "@interface/user";
 import { Button, Popconfirm, Space } from "antd";
 import { ICustomSearchBox, IMetaResponse } from "@interface/tableCustomize";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { active, reload } from "@store/slice/globalSlice";
+import { IBook } from "@interface/book";
+import BookManagementApi from "@api/Admin/BookManagement/BookManagement";
+import moment from "moment";
 
-const User = () => {
+const Book = () => {
   const [meta, setMeta] = useState<IMetaResponse>();
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [dataSearch, setDataSearch] = useState<IUser>();
+  const [dataSearch, setDataSearch] = useState<IBook>();
   const [detailId, setDetailId] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState<any>("");
@@ -41,7 +43,7 @@ const User = () => {
   };
 
   const handleViewDetailId = async (_id: string) => {
-    const res = await UserManagementApi.getUsersWithPaginate(params);
+    const res = await BookManagementApi.getBooksWithPaginate(params);
     const dataRes = res.data;
     const { result } = dataRes;
     const detailData = result.find((item: IUser) => item._id === _id);
@@ -49,39 +51,38 @@ const User = () => {
     toggleDrawer();
   };
 
-  const handleEditDetailId = async (_id: string, type: string) => {
-    const detailData = data.find((item: IUser) => item._id === _id);
-    console.log(detailData);
-    setDetailId(detailData);
-    showModal(type);
-  };
+  // const handleEditDetailId = async (_id: string, type: string) => {
+  //   const detailData = data.find((item: IUser) => item._id === _id);
+  //   console.log(detailData);
+  //   setDetailId(detailData);
+  //   showModal(type);
+  // };
 
-  const handleDeleteId = async (_id: string) => {
-    try {
-      const res = await UserManagementApi.deleteAUser(_id);
-      console.log("delete::: ", res);
-      setIsLoading(false);
-      dispatch(reload(!reloadPage));
-      funcUtils.notify('Xóa người dùng thành công!', 'success');
-    } catch (error) {
-    }
-  };
+  // const handleDeleteId = async (_id: string) => {
+  //   try {
+  //     const res = await UserManagementApi.deleteAUser(_id);
+  //     console.log("delete::: ", res);
+  //     setIsLoading(false);
+  //     dispatch(reload(!reloadPage));
+  //     funcUtils.notify('Xóa người dùng thành công!', 'success');
+  //   } catch (error) {
+  //   }
+  // };
 
   const labelName: ICustomSearchBox[] = [
     {
-      label: "Tên hiển thị",
-      name: 'fullName',
+      label: "Tên sách",
+      name: "mainText",
     },
     {
-      label: 'Email',
-      name: 'email'
+      label: "Tác giả",
+      name: "author",
     },
     {
-      label: 'Số điện thoại',
-      name: 'phone',
-      inputType: 'number'
-    }
-  ]
+      label: "Thể loại",
+      name: "category",
+    },
+  ];
 
   const onChange: TableProps<IUserDataType>["onChange"] = (
     pagination,
@@ -92,7 +93,7 @@ const User = () => {
     console.log("params", pagination, filters, sorter, extra);
   };
 
-  const columns: ColumnsType<IUserDataType> = [
+  const columns: ColumnsType<IBook> = [
     {
       title: "ID",
       dataIndex: "_id",
@@ -106,16 +107,24 @@ const User = () => {
       ),
     },
     {
-      title: "Tên hiển thị",
-      dataIndex: "fullName",
+      title: "Tên sách",
+      dataIndex: "mainText",
     },
     {
-      title: "Email",
-      dataIndex: "email",
+      title: "Thể loại",
+      dataIndex: "category",
     },
     {
-      title: "Số điện thoại",
-      dataIndex: "phone",
+      title: "Tác giả",
+      dataIndex: "author",
+    },
+    {
+      title: "Giá tiền",
+      dataIndex: "price",
+    },
+    {
+      title: "Ngày cập nhật",
+      dataIndex: "updatedAt",
     },
     {
       title: "Action",
@@ -125,8 +134,8 @@ const User = () => {
           <Popconfirm
             placement="left"
             title="Xác nhận xóa người dùng"
-            description="Bạn có muốn xóa người dùng này?"
-            onConfirm={() => handleDeleteId(_record._id)}
+            description="Bạn có muốn xóa sách này?"
+            // onConfirm={() => handleDeleteId(_record._id)}
             okText="Xóa"
             cancelText="Không"
           >
@@ -135,7 +144,9 @@ const User = () => {
             </Button>
           </Popconfirm>
 
-          <Button onClick={() => handleEditDetailId(_record._id, "edit")}>
+          <Button
+          // onClick={() => handleEditDetailId(_record._id, "edit")}
+          >
             <EditOutlined style={{ color: "#f57800" }} />
           </Button>
         </Space>
@@ -143,23 +154,25 @@ const User = () => {
     },
   ];
 
-  const params = `current=${page.current}&pageSize=${page.pageSize}&email=${
-    dataSearch?.email || ""
-  }&fullName=/${dataSearch?.fullName || ""}/&phone=/${
-    dataSearch?.phone || ""
+  const params = `current=${page.current}&pageSize=${page.pageSize}&mainText=${
+    dataSearch?.mainText || ""
+  }&author=/${dataSearch?.author || ""}/&category=/${
+    dataSearch?.category || ""
   }/`;
 
-  const getUsers = async () => {
+  const getBooks = async () => {
     setIsLoading(true);
-    const res = await UserManagementApi.getUsersWithPaginate(params);
+    const res = await BookManagementApi.getBooksWithPaginate(params);
     const dataRes = res.data;
     const { meta, result } = dataRes;
 
-    const dataSource = result.map((item: IUser, index: any) => ({
+    const dataSource = result.map((item: IBook, index: any) => ({
       _id: item._id, // Storing the actual _id separately
-      fullName: item.fullName,
-      email: item.email,
-      phone: item.phone,
+      mainText: item.mainText,
+      category: item.category,
+      author: item.author,
+      price: item.price,
+      updatedAt: moment(item.updatedAt).format("DD-MM-YYYY HH:MM:SS"),
     }));
 
     setData(dataSource);
@@ -168,7 +181,7 @@ const User = () => {
   };
 
   useEffect(() => {
-    getUsers();
+    getBooks();
   }, [page, dataSearch, reloadPage]);
 
   return (
@@ -192,4 +205,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Book;

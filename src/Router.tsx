@@ -12,6 +12,7 @@ import Admin from "./components/modules/Admin";
 import AdminRoute from "./components/common/AdminRoute";
 import UserLayout from "./components/layout/UserLayout";
 import User from "./components/modules/User/User";
+import Book from "./components/modules/Book/Book";
 const listRoute: RouteObject[] = [
   {
     element: <AuthLayout />,
@@ -31,7 +32,7 @@ const listRoute: RouteObject[] = [
 
   {
     element: <UserLayout />,
-    path:  "/",
+    path: "/",
     errorElement: <NotFound />,
     children: [
       //User
@@ -77,6 +78,14 @@ const listRoute: RouteObject[] = [
             <AdminRoute>
               <User />
             </AdminRoute>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "book",
+        element: (
+          <PrivateRoute>
+            <Book />
           </PrivateRoute>
         ),
       },
