@@ -23,6 +23,8 @@ const CustomModal = ({
   const [excelData, setExcelData] = useState<any>([]);
 
   console.log("Modal::: ", type);
+  console.log("Modal::: ", type);
+  console.log("Modal::: ", type);
 
   useEffect(() => {
     if (detailData) {
