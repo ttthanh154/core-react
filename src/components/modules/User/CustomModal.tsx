@@ -22,7 +22,7 @@ const CustomModal = ({
   const toggle = useAppSelector((state) => state.global.reload);
   const [excelData, setExcelData] = useState<any>([]);
 
-  // console.log("Modal::: ", type);
+  console.log("Modal::: ", type);
 
   useEffect(() => {
     if (detailData) {
