@@ -3,9 +3,9 @@ import CustomTable from "./CustomTable";
 import { useState, useEffect } from "react";
 import UserManagementApi from "@api/Admin/UserManagement/UserManagementApi";
 import { funcUtils, useAppDispatch, useAppSelector } from "@utils/hook";
-import { IUser, IUserDataType } from "@interface/user";
-import { Button, Popconfirm, Space } from "antd";
-import { ICustomSearchBox, IMetaResponse } from "@interface/tableCustomize";
+import { IUser, IUserDataType, IUserFieldType } from "@interface/user";
+import { Button, Form, Popconfirm, Space } from "antd";
+import { ICustomSearchBox, ICustomValModal, IMetaResponse } from "@interface/tableCustomize";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { active, reload } from "@store/slice/globalSlice";
 
@@ -21,6 +21,8 @@ const User = () => {
   const page = useAppSelector((state) => state.global.page);
   const isActive = useAppSelector((state) => state.global.active);
   const reloadPage = useAppSelector((state) => state.global.reload);
+
+  const modalApi = UserManagementApi;
 
   const handleSearchData = (data: any) => {
     setDataSearch(data);
@@ -41,7 +43,7 @@ const User = () => {
   };
 
   const handleViewDetailId = async (_id: string) => {
-    const res = await UserManagementApi.getUsersWithPaginate(params);
+    const res = await UserManagementApi.getWithPaginate(params);
     const dataRes = res.data;
     const { result } = dataRes;
     const detailData = result.find((item: IUser) => item._id === _id);
@@ -58,7 +60,7 @@ const User = () => {
 
   const handleDeleteId = async (_id: string) => {
     try {
-      const res = await UserManagementApi.deleteAUser(_id);
+      const res = await UserManagementApi.delete(_id);
       console.log("delete::: ", res);
       setIsLoading(false);
       dispatch(reload(!reloadPage));
@@ -66,6 +68,8 @@ const User = () => {
     } catch (error) {
     }
   };
+
+  
 
   const labelName: ICustomSearchBox[] = [
     {
@@ -82,6 +86,47 @@ const User = () => {
       inputType: 'number'
     }
   ]
+
+  const modalFields: ICustomValModal[] = [
+    {
+      title: 'người dùng',
+      field: [
+        {
+          label: 'ID',
+          name: '_id',
+          hidden: true
+        },
+        {
+          label: 'Họ tên',
+          name: 'fullName',
+          rules: [
+            { required: true, message: "Vui lòng nhập họ tên đầy đủ!" }
+          ]
+        },
+        {
+          label: 'Mật khẩu',
+          name: 'password',
+          rules: [{ required: true, message: "Vui lòng nhập mật khẩu!" }], 
+          inputType: 'password'
+        },
+        {
+          label: "Email",
+          name: 'email',
+          rules:[{ required: true, message: "Vui lòng nhập email!" }]
+
+        },
+        {
+          label: 'Số điện thoại',
+          name: 'phone',
+          rules: [
+            { required: true, message: "Vui lòng nhập số điện thoại!" },
+          ]
+        }
+      ]
+    }
+  ]
+
+  // console.log(modalFields)
 
   const onChange: TableProps<IUserDataType>["onChange"] = (
     pagination,
@@ -151,7 +196,7 @@ const User = () => {
 
   const getUsers = async () => {
     setIsLoading(true);
-    const res = await UserManagementApi.getUsersWithPaginate(params);
+    const res = await UserManagementApi.getWithPaginate(params);
     const dataRes = res.data;
     const { meta, result } = dataRes;
 
@@ -187,6 +232,8 @@ const User = () => {
         isModalOpen={isModalOpen}
         type={type}
         labelName={labelName}
+        modalFields={modalFields}
+        modalApi={modalApi}
       />
     </>
   );

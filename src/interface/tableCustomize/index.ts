@@ -1,1 +1,1 @@
-export type {ICustomTableProps,IMetaResponse, ICustomPagination,ICustomTypeModal,ICustomSearchBox} from './tableCustomize'
+export type {ICustomTableProps,IMetaResponse, ICustomPagination,ICustomTypeModal,ICustomSearchBox, ICustomValModal} from './tableCustomize'

@@ -10,7 +10,7 @@ export interface LoadingState {
 
 const initialState: LoadingState = {
   loading: false,
-  page: { pageSize: 10, current: 1 },
+  page: { pageSize: 5, current: 1 },
   active: false,
   reload: false,
 };

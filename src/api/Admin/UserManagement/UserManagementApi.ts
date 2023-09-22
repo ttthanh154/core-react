@@ -12,34 +12,34 @@ const UserManagementApi = {
       funcUtils.AuthHeader()
     );
   },
-  getUsersWithPaginate: (params: string) => {
+  getWithPaginate: (params: string) => {
     return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/user?${params}`,
       funcUtils.AuthHeader()
     );
   },
-  createAUser: (data: IUserFieldType) => {
+  create: (data: IUserFieldType) => {
     return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/user`,
       data,
       funcUtils.AuthHeader()
     );
   },
-  createAUserList: (data: any) => {
+  createList: (data: any) => {
     return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/user/bulk-create`,
       data,
       funcUtils.AuthHeader()
     );
   },
-  updateAUser: (data: IUserFieldType) => {
+  update: (data: IUserFieldType) => {
     return customAxios.put<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/user`,
       data,
       funcUtils.AuthHeader()
     );
   },
-  deleteAUser: (id: string) => {
+  delete: (id: string) => {
     return customAxios.delete<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/user/${id}`,
       funcUtils.AuthHeader()

@@ -15,6 +15,9 @@ export interface ICustomTableProps {
   type: string;
   handleCancel: () => void;
   labelName: any;
+  modalFields: any;
+  modalApi: any;
+  options?: any[]; 
 }
 
 export interface IMetaResponse {
@@ -34,8 +37,14 @@ export interface ICustomTypeModal {
 }
 
 export interface ICustomSearchBox {
-  label:  string;
+  hidden?: boolean;
+  label: string;
   name: string;
   rules?: any;
   inputType?: string;
+}
+
+export interface ICustomValModal {
+  title: string;
+  field: ICustomSearchBox[];
 }

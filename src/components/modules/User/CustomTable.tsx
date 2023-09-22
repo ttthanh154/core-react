@@ -16,15 +16,16 @@ const CustomTable = (props: ICustomTableProps) => {
     detailData,
     onToggleDrawer,
     showModal,
-    isModalOpen, 
+    isModalOpen,
     type,
     handleCancel,
-    labelName
+    labelName,
+    modalFields,
+    modalApi,
+    options
   } = props;
-  
 
-
-  // console.log(labelName)
+  // console.log(modalFields)
 
   const handleExport = (data: any[]) => {
     if (data.length > 1) {
@@ -34,8 +35,6 @@ const CustomTable = (props: ICustomTableProps) => {
       XLSX.writeFile(workbook, "DataSheet.xlsx");
     }
   };
-
-  
 
   const renderHeader = () => {
     return (
@@ -73,9 +72,12 @@ const CustomTable = (props: ICustomTableProps) => {
   return (
     <>
       <div className="customTable">
-        <SearchBox searchData={searchData} labelName={labelName}/>
-        <CustomDrawer data={detailData} onToggleDrawer={onToggleDrawer} />
-
+        <SearchBox searchData={searchData} labelName={labelName} />
+        <CustomDrawer
+          columns={columns}
+          data={detailData}
+          onToggleDrawer={onToggleDrawer}
+        />
         <Table
           title={renderHeader}
           columns={columns}
@@ -92,6 +94,9 @@ const CustomTable = (props: ICustomTableProps) => {
           type={type}
           detailData={detailData}
           columns={columns}
+          modalFields={modalFields}
+          modalApi={modalApi}
+          options={options}
         />
       </div>
     </>

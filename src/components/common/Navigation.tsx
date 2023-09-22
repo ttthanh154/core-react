@@ -63,7 +63,7 @@ const Navigation = (props: any) => {
       <Layout>
         <Header />
         <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb
+          {/* <Breadcrumb
             style={{ margin: "16px 0" }}
             items={[
               {
@@ -76,7 +76,7 @@ const Navigation = (props: any) => {
                 title: "An Application",
               },
             ]}
-          />
+          /> */}
           <div className="container__content">{props.children}</div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
