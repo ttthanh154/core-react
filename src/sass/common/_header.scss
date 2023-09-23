@@ -5,7 +5,9 @@
     padding: 5px 25px;
 
     .header__container-logo {
-
+        img{
+            cursor: pointer;
+        }
     }
 
     .header__container-searchBar {
@@ -25,6 +27,16 @@
     }
 
     .header__container-account {
-
+        .header__container-account--btn {
+     
+            padding: 3px;
+            border-radius: 4px;
+        }
+        .header__container-account--btn:hover {
+            width: 100%;
+            background-color: rgb(128, 128, 137);
+            padding: 3px;
+            border-radius: 4px;
+        }
     }
 }

@@ -9,7 +9,6 @@ import {
   Button,
   Rate,
   Tabs,
-  Pagination,
 } from "antd";
 import { useState, useEffect } from "react";
 import { IBook, IOptions } from "@interface/book";
@@ -21,18 +20,18 @@ import { v4 as uuidv4 } from "uuid";
 import CustomPagination from "./User/CustomPagination";
 import { IRatingRate } from "@interface/home";
 import { loading } from "@store/slice/globalSlice";
+import Header from "../common/Header";
 const Home = () => {
   const [meta, setMeta] = useState<IMetaResponse>();
   const [data, setData] = useState<IBook[]>([]);
-  const [dataSearch, setDataSearch] = useState<IBook>();
   const [options, setOptions] = useState<IOptions[]>([]);
-  const [sort, setSort] = useState('-sold') 
+  const [sort, setSort] = useState("-sold");
+  const [filter, setFilter] = useState([]);
   const dispatch = useAppDispatch();
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const page = useAppSelector((state) => state.global.page);
 
   const params = `current=${page.current}&pageSize=${page.pageSize}&category=${
-    dataSearch?.category || ""
+    filter || ""
   }&sort=${sort}`;
 
   const getBooks = async () => {
@@ -74,34 +73,52 @@ const Home = () => {
   };
 
   const [form] = Form.useForm();
+
   const handleChangeFilter = (changedValues: any, values: any) => {
-    console.log(">>> check handleChangeFilter", changedValues, values);
+    console.log(">>> ", changedValues, values);
+    if (changedValues?.category) {
+      const array = values.category;
+      array?.length > 0 ?? array.join();
+      setFilter(array);
+    }
   };
 
-  const onFinish = (values: any) => {};
+  const onFinish = (values: any) => {
+    console.log(values?.range);
+
+      let p = `&price>=${values?.range.from}&price<=${values?.range.to}`;
+  
+      if (values?.category) {
+        let array = values.category;
+        array?.length > 0 ?? array.join();
+        array += p;
+        setFilter(array);
+    }
+  };
 
   const onChange = (key: any) => {
     console.log(key);
+    setSort(key);
   };
 
   const items = [
     {
-      key: "1",
+      key: "-sold",
       label: `Phổ biến`,
       children: <></>,
     },
     {
-      key: "2",
+      key: "-updatedAt",
       label: `Hàng Mới`,
       children: <></>,
     },
     {
-      key: "3",
+      key: "price",
       label: `Giá Thấp Đến Cao`,
       children: <></>,
     },
     {
-      key: "4",
+      key: "-price",
       label: `Giá Cao Đến Thấp`,
       children: <></>,
     },
@@ -118,24 +135,33 @@ const Home = () => {
   useEffect(() => {
     getBooks();
     console.log(data);
-  }, [page, dataSearch]);
+  }, [page, sort, filter]);
 
   useEffect(() => {
     getCategory();
   }, []);
+
   return (
     <div
       className="homepage-container"
       style={{ maxWidth: 1440, margin: "0 auto" }}
     >
+      <Header/>
       <Row gutter={[20, 20]}>
+        {/* Left Column */}
         <Col md={4} sm={0} xs={0} className="left-col">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <span>
-              {" "}
               <FilterTwoTone /> Bộ lọc tìm kiếm
             </span>
-            <ReloadOutlined title="Reset" onClick={() => form.resetFields()} />
+            <ReloadOutlined
+              title="Reset"
+              onClick={() => {
+                form.resetFields();
+                setSort("-sold");
+                setFilter([]);
+              }}
+            />
           </div>
           <Form
             onFinish={onFinish}
@@ -204,7 +230,7 @@ const Home = () => {
             <Form.Item label="Đánh giá" labelCol={{ span: 24 }}>
               {ratings?.map((item: IRatingRate) => (
                 <Rate
-                key={item.value}
+                  key={item.value}
                   value={item.value}
                   disabled
                   style={{ color: "#ffce3d", fontSize: 15 }}
@@ -213,6 +239,7 @@ const Home = () => {
             </Form.Item>
           </Form>
         </Col>
+        {/* Right Column */}
         <Col md={20} xs={24} className="right-col">
           <Row>
             <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
@@ -245,7 +272,6 @@ const Home = () => {
           </Row>
           <Divider />
           <Row style={{ display: "flex", justifyContent: "center" }}>
-            {/* <Pagination defaultCurrent={meta?.current} total={meta?.total} responsive /> */}
             <CustomPagination meta={meta} />
           </Row>
         </Col>

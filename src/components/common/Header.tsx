@@ -2,6 +2,7 @@ import {
   DownOutlined,
   SearchOutlined,
   ShoppingCartOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 import AuthApi from "@api/Auth/AuthApi";
 import { loading } from "@store/slice/globalSlice";
@@ -9,6 +10,7 @@ import { logout } from "@store/slice/userSlice";
 import { useAppDispatch, useAppSelector } from "@utils/hook";
 import { Avatar, Badge, Dropdown, Form, Input, Popover, Space } from "antd";
 import type { MenuProps } from "antd";
+import {useState} from 'react';
 
 import { useForm } from "antd/es/form/Form";
 import { Link, useNavigate } from "react-router-dom";
@@ -19,6 +21,7 @@ const Header = () => {
   const userAvatar = useAppSelector((state) => state.user.user.avatar);
   const [form] = useForm();
   const dispatch = useAppDispatch();
+  
   const handleLogout = async () => {
     dispatch(loading(true));
     try {
@@ -50,18 +53,25 @@ const Header = () => {
       })
     : null;
 
+
   const urlAvatar = `${
     import.meta.env.VITE_BACKEND_API
   }/images/avatar/${userAvatar}`;
 
+  const handleClickImage = () => {
+    window.location.reload();
+  }
   return (
     <>
       <div className="header__container">
-        <div className="header__container-logo">
+        <div className="header__container-logo" >
           <img
             src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZtrrYWlslXjJkIMhqvT73sYB0MC3TTurFvdLMgXZiuG83_-tsmqDuYXVPcnY6HLRj7bc&usqp=CAU"
             alt="Logo"
             style={{ width: "40px", height: "40px" }}
+            onClick={
+              handleClickImage
+            }
           />
         </div>
 
@@ -87,15 +97,24 @@ const Header = () => {
         </div>
 
         <div className="header__container-account">
-          <Dropdown menu={{ items }} trigger={["click"]} className="">
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <Avatar src={urlAvatar} />
-                <span>{username}</span>
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
+          {username && userRole && userAvatar ? (
+            <Dropdown menu={{ items }} trigger={["click"]} className="">
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar src={urlAvatar} />
+                  <span>{username}</span>
+                  <DownOutlined />
+                </Space>
+              </a>
+            </Dropdown>
+          ) : (
+            <Link to={"/login"}>
+              <div className="header__container-account--btn">
+                <SmileOutlined style={{ fontSize: "14px" }} />
+                <span style={{ fontSize: "14px" }}>Tài khoản</span>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </>

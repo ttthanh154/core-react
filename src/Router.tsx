@@ -20,6 +20,10 @@ const listRoute: RouteObject[] = [
     path: "/",
     children: [
       {
+        index: true,
+        element: <Home/>
+      },
+      {
         path: "login",
         element: <Login />,
       },
