@@ -3,18 +3,21 @@ import type { ColumnsType } from "antd/es/table";
 
 export interface ICustomTableProps {
   columns?: ColumnsType<any>;
-  dataSource: any[];
+  dataSource?: any;
   onChange?: any;
   meta?: IMetaResponse;
-  isLoading: boolean;
+  isLoading?: boolean;
   searchData?: any;
-  detailData: IUser;
-  onToggleDrawer: () => void;
-  showModal: any;
-  isModalOpen: boolean;
-  type: string;
-  handleCancel: () => void;
-  labelName: any;
+  detailData?: IUser;
+  onToggleDrawer?: any;
+  showModal?: any;
+  isModalOpen?: boolean;
+  type?: string;
+  handleCancel?: () => void;
+  labelName?: any;
+  modalFields?: any;
+  modalApi: any;
+  options?: any[]; 
 }
 
 export interface IMetaResponse {
@@ -34,8 +37,14 @@ export interface ICustomTypeModal {
 }
 
 export interface ICustomSearchBox {
-  label:  string;
+  hidden?: boolean;
+  label: string;
   name: string;
   rules?: any;
   inputType?: string;
+}
+
+export interface ICustomValModal {
+  title: string;
+  field: ICustomSearchBox[];
 }

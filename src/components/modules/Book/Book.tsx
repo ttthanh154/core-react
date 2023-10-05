@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import { funcUtils, useAppDispatch, useAppSelector } from "@utils/hook";
 import { IUser, IUserDataType } from "@interface/user";
 import { Button, Popconfirm, Space } from "antd";
-import { ICustomSearchBox, IMetaResponse } from "@interface/tableCustomize";
+import {
+  ICustomSearchBox,
+  ICustomValModal,
+  IMetaResponse,
+} from "@interface/tableCustomize";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { active, reload } from "@store/slice/globalSlice";
 import { IBook } from "@interface/book";
@@ -19,10 +23,13 @@ const Book = () => {
   const [detailId, setDetailId] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState<any>("");
+  const [options, setOptions] = useState<any>([]);
   const dispatch = useAppDispatch();
   const page = useAppSelector((state) => state.global.page);
   const isActive = useAppSelector((state) => state.global.active);
   const reloadPage = useAppSelector((state) => state.global.reload);
+
+  const modalApi = BookManagementApi;
 
   const handleSearchData = (data: any) => {
     setDataSearch(data);
@@ -43,7 +50,7 @@ const Book = () => {
   };
 
   const handleViewDetailId = async (_id: string) => {
-    const res = await BookManagementApi.getBooksWithPaginate(params);
+    const res = await BookManagementApi.getWithPaginate(params);
     const dataRes = res.data;
     const { result } = dataRes;
     const detailData = result.find((item: IUser) => item._id === _id);
@@ -51,23 +58,25 @@ const Book = () => {
     toggleDrawer();
   };
 
-  // const handleEditDetailId = async (_id: string, type: string) => {
-  //   const detailData = data.find((item: IUser) => item._id === _id);
-  //   console.log(detailData);
-  //   setDetailId(detailData);
-  //   showModal(type);
-  // };
+  const handleEditDetailId = async (_id: string, type: string) => {
+    const res = await BookManagementApi.getWithPaginate(params);
+    const dataRes = res.data;
+    const { result } = dataRes;
+    const detailData = result.find((item: IBook) => item._id === _id);
+    console.log('detailData',detailData);
+    setDetailId(detailData);
+    showModal(type);
+  };
 
-  // const handleDeleteId = async (_id: string) => {
-  //   try {
-  //     const res = await UserManagementApi.deleteAUser(_id);
-  //     console.log("delete::: ", res);
-  //     setIsLoading(false);
-  //     dispatch(reload(!reloadPage));
-  //     funcUtils.notify('Xóa người dùng thành công!', 'success');
-  //   } catch (error) {
-  //   }
-  // };
+  const handleDeleteId = async (_id: string) => {
+    try {
+      const res = await BookManagementApi.delete(_id);
+      console.log("delete::: ", res);
+      setIsLoading(false);
+      dispatch(reload(!reloadPage));
+      funcUtils.notify("Xóa sách thành công!", "success");
+    } catch (error) {}
+  };
 
   const labelName: ICustomSearchBox[] = [
     {
@@ -81,6 +90,61 @@ const Book = () => {
     {
       label: "Thể loại",
       name: "category",
+    },
+  ];
+
+  const modalFields: ICustomValModal[] = [
+    {
+      title: "sách",
+      field: [
+        {
+          name: "_id",
+          label: "ID",
+          hidden: true,
+        },
+        {
+          label: "Tên sách",
+          name: "mainText",
+          rules: [{ required: true, message: "Vui lòng nhập tên sách!" }],
+        },
+        {
+          label: "Tác giả",
+          name: "author",
+          rules: [{ required: true, message: "Vui lòng nhập tên tác giả!" }],
+        },
+        {
+          label: "Giá",
+          name: "price",
+          rules: [{ required: true, message: "Vui lòng nhập giá bán!" }],
+          inputType: "price",
+        },
+        {
+          label: "Thể loại",
+          name: "category",
+          inputType: "select",
+        },
+        {
+          label: "Bán",
+          name: 'sold',
+          inputType: 'number'
+        },
+        {
+          label: 'Số lượng',
+          name: "quantity",
+          inputType: 'number'
+        }
+        ,
+        {
+          label: "Ảnh thumbnail",
+          name: "thumbnail",
+          inputType: "upload",
+        },
+        {
+          label: "Ảnh slider",
+          name: "slider",
+          inputType: "uploadSlider",
+        },
+      ],
     },
   ];
 
@@ -135,7 +199,7 @@ const Book = () => {
             placement="left"
             title="Xác nhận xóa người dùng"
             description="Bạn có muốn xóa sách này?"
-            // onConfirm={() => handleDeleteId(_record._id)}
+            onConfirm={() => handleDeleteId(_record._id)}
             okText="Xóa"
             cancelText="Không"
           >
@@ -144,9 +208,7 @@ const Book = () => {
             </Button>
           </Popconfirm>
 
-          <Button
-          // onClick={() => handleEditDetailId(_record._id, "edit")}
-          >
+          <Button onClick={() => handleEditDetailId(_record._id, "edit")}>
             <EditOutlined style={{ color: "#f57800" }} />
           </Button>
         </Space>
@@ -162,10 +224,9 @@ const Book = () => {
 
   const getBooks = async () => {
     setIsLoading(true);
-    const res = await BookManagementApi.getBooksWithPaginate(params);
+    const res = await BookManagementApi.getWithPaginate(params);
     const dataRes = res.data;
     const { meta, result } = dataRes;
-
     const dataSource = result.map((item: IBook, index: any) => ({
       _id: item._id, // Storing the actual _id separately
       mainText: item.mainText,
@@ -180,9 +241,23 @@ const Book = () => {
     setIsLoading(false);
   };
 
+  const getCategory = async () => {
+    const res = await BookManagementApi.getCategory();
+    console.log("res::: ", res.data);
+    const dataSelection = res.data.map((item: any) => ({
+      value: item,
+      label: item,
+    }));
+    setOptions(dataSelection);
+  };
+
   useEffect(() => {
     getBooks();
   }, [page, dataSearch, reloadPage]);
+
+  useEffect(() => {
+    getCategory();
+  }, []);
 
   return (
     <>
@@ -200,6 +275,9 @@ const Book = () => {
         isModalOpen={isModalOpen}
         type={type}
         labelName={labelName}
+        modalFields={modalFields}
+        modalApi={modalApi}
+        options={options}
       />
     </>
   );

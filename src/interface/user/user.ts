@@ -14,9 +14,9 @@ export interface IUser {
 export interface IUserDataType {
   key?: React.Key;
   _id: string;
-  fullName: number;
-  email: number;
-  phone: number;
+  fullName: string;
+  email: string;
+  phone: string;
 }
 
 
@@ -27,3 +27,7 @@ export interface IUserFieldType  {
   email?: string;
   phone?: string;
 };
+
+export interface IUserUpload extends Omit<IUserDataType,'_id, email'> {
+  avatar: string;
+}

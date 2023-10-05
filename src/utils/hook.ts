@@ -47,6 +47,37 @@ const funcUtils = {
     };
     return authHeader;
   },
+  UploadFile: () => {
+    const token = localStorage.getItem("access_token");
+  
+    const uploadFile = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+        "upload-type": "book",
+      },
+    };
+    return uploadFile;
+  },
+  UploadAvatar: () => {
+    const token = localStorage.getItem("access_token");
+  
+    const uploadAvatar = {
+      headers: {  
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+        "upload-type": "avatar",
+      },
+    };
+    return uploadAvatar;
+  },
+  formattedCurrency: (price:number) => {
+    return Intl.NumberFormat('vi', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(price)
+  },
+  
 };
 
 export { funcUtils };

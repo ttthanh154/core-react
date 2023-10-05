@@ -4,9 +4,9 @@ export interface UserDetail {
   email: string;
   phone: string;
   fullName: string;
-  role: string;
+  role?: string;
   avatar: string;
-  id: string;
+  id?: string;
 }
 
 export interface UserState {
@@ -50,10 +50,19 @@ export const userSlice = createSlice({
         id: "",
       };
     },
+    uploadAvatar: (state, action: PayloadAction<any>) => {
+      state.user.avatar = action.payload
+    }
+    ,
+    updateInfo: (state, action: PayloadAction<UserDetail>) => {
+      state.user.fullName = action.payload.fullName;
+      state.user.phone = action.payload.phone;
+      state.user.avatar = action.payload.avatar;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { login, fetchAccount, logout } = userSlice.actions;
+export const { login, fetchAccount, logout, uploadAvatar, updateInfo } = userSlice.actions;
 
 export default userSlice.reducer;

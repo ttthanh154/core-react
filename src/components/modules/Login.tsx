@@ -72,7 +72,7 @@ const Login = () => {
             </Form>
             <b>Hoặc</b>
             <div>
-              Chưa có tài khoản?{" "}
+              Chưa có tài khoản?
               <Link to={"/register"}>
                 <span id="register__link">Đăng ký</span>
               </Link>

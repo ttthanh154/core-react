@@ -1,44 +1,66 @@
 import { funcUtils } from "@utils/hook";
 import customAxios from "@utils/customAxios";
 import { ICustomDesignedResponse } from "@interface/customAxios";
-import { IUserFieldType } from "@interface/user/user";
+import { IBookFields } from "@interface/book";
 
 const version: string = import.meta.env.VITE_APP_VERSION_API;
 const apiUrl: string = `${version}`;
 const BookManagementApi = {
-  getBooksWithPaginate: (params: string) => {
+  getWithPaginate: (params: string | null) => {
     return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/book?${params}`,
+      // funcUtils.AuthHeader()
+    );
+  },
+  getOne: (id: string | null) => {
+    return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/book/${id}`,
+      // funcUtils.AuthHeader()
+    );
+  },
+  create: (data: IBookFields) => {
+    return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/book`,
+      data,
       funcUtils.AuthHeader()
     );
   },
-//   createAUser: (data: IUserFieldType) => {
-//     return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
-//       `${apiUrl}/user`,
-//       data,
-//       funcUtils.AuthHeader()
-//     );
-//   },
-//   createAUserList: (data: any) => {
-//     return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
-//       `${apiUrl}/user/bulk-create`,
-//       data,
-//       funcUtils.AuthHeader()
-//     );
-//   },
-//   updateAUser: (data: IUserFieldType) => {
-//     return customAxios.put<ICustomDesignedResponse, ICustomDesignedResponse>(
-//       `${apiUrl}/user`,
-//       data,
-//       funcUtils.AuthHeader()
-//     );
-//   },
-//   deleteAUser: (id: string) => {
-//     return customAxios.delete<ICustomDesignedResponse, ICustomDesignedResponse>(
-//       `${apiUrl}/user/${id}`,
-//       funcUtils.AuthHeader()
-//     )
-//   }
+  // createList: (data: any) => {
+  //   return customAxios.post<ICustomDesignedResponse, ICustomDesignedResponse>(
+  //     `${apiUrl}/book/bulk-create`,
+  //     data,
+  //     funcUtils.AuthHeader()
+  //   );
+  // },
+  update: ( data: IBookFields) => {
+    return customAxios.put<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/book/${data._id}`,
+      data,
+      funcUtils.AuthHeader()
+    );
+  },
+  delete: (id: string) => {
+    return customAxios.delete<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/book/${id}`,
+      funcUtils.AuthHeader()
+    );
+  },
+  getCategory: () => {
+    return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/database/category`,
+      // funcUtils.AuthHeader()
+    );
+  },
+  uploadImage: (fileImg:any) => {
+    const bodyFormData = new FormData();
+    bodyFormData.append('fileImg',fileImg);
+    return customAxios.post<any,any>(
+      `${apiUrl}/file/upload`,
+      bodyFormData
+      ,
+      funcUtils.UploadFile()
+    )
+  }
 };
 
 export default BookManagementApi;

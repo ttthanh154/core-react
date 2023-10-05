@@ -1,1 +1,1 @@
-export type {IBook} from './book'
+export type {IBook, IBookFields, IOptions} from './book'

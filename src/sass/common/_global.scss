@@ -1,0 +1,90 @@
+.cart__popover {
+    .ant-popover-content {
+        .ant-popover-inner {
+            .cart-item {
+                padding: 5px;
+                display: flex;
+                justify-content: flex-start;
+                gap: 5px;
+
+                .cart-item__price {
+                    color: $sub-color-1 ;
+                }
+            }
+
+            .cart-view__btn {
+                display: flex;
+                justify-content: flex-end;
+                padding: 5px;
+
+                .view__btn {
+                    border: 1px solid $sub-color-1;
+                }
+
+                .view__btn:hover {
+                    background-color: $sub-color-1;
+                    color: $main-color;
+                }
+            }
+        }
+    }
+}
+
+.accountModal {
+    .ant-modal-content {
+        .ant-modal-body {
+            .ant-tabs-content-holder {
+                .profile {
+                    border-radius: 5px;
+                    display: flex;
+                    flex-direction: row;
+                    background-color: $sub-color-4;
+                    gap: 5px;
+                    .avatar {
+                        width: calc(100% - 65%);
+                        height: 300px;
+                        padding: 5px;
+                        border: 1px solid $sub-color-4;
+
+                        .ant-space-item{
+                            display: flex;
+                            justify-content: center;
+                        }
+                    }
+
+                    .info{
+                        width: 100%;
+                        padding: 5px;
+                        border: 1px solid white;
+
+                        .info-content__footer-button{ 
+                            display: flex;
+                            justify-content: flex-end;
+                            .submit-button{ 
+                                background-color: $sub-color-2;
+                                color: $txt-color;
+                            }
+                        }
+                    }
+                }
+
+                .password {
+                    .password__content-field{
+                        // background-color: red;
+                        padding: 25px;
+                    }
+                    .password__footer{
+                        display: flex;
+                        justify-content: flex-end;
+                        // background-color: red;
+                        .submit-button{
+                            background-color: $sub-color-2;
+                                color: $txt-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

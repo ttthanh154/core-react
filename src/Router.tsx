@@ -1,18 +1,21 @@
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 // components
 import NotFound from "./components/common/Notfound";
-import Contact from "./components/modules/Contact";
-import About from "./components/modules/About";
 import Home from "./components/modules/Home";
 import Login from "./components/modules/Login";
 import AuthLayout from "./components/layout/AuthLayout";
 import Register from "./components/modules/Register";
 import PrivateRoute from "./components/common/PrivateRoute";
-import Admin from "./components/modules/Admin";
 import AdminRoute from "./components/common/AdminRoute";
 import UserLayout from "./components/layout/UserLayout";
 import User from "./components/modules/User/User";
 import Book from "./components/modules/Book/Book";
+import BookDetail from "./components/modules/Book/BookDetail";
+import Layout from "./components/layout/Layout";
+import Order from "./components/modules/Order/Order";
+import History from "./components/modules/History/History";
+import OrderManagement from "./components/modules/Order/OrderManagement";
+import Dashboard from "./components/modules/Dashboard/Dashboard";
 const listRoute: RouteObject[] = [
   {
     element: <AuthLayout />,
@@ -29,7 +32,22 @@ const listRoute: RouteObject[] = [
       },
     ],
   },
-
+  {
+    element: <Layout />,
+    path: "/",
+    errorElement: <NotFound />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "detail-book/:slug",
+        element: <BookDetail />,
+      },
+      
+    ],
+  },
   {
     element: <UserLayout />,
     path: "/",
@@ -45,28 +63,26 @@ const listRoute: RouteObject[] = [
         ),
       },
       {
-        path: "contact",
-        element: (
-          <PrivateRoute>
-            <Contact />,
-          </PrivateRoute>
-        ),
+        path: 'order',
+        element: 
+        <PrivateRoute>
+          <Order/>
+        </PrivateRoute>
       },
       {
-        path: "about",
-        element: (
-          <PrivateRoute>
-            <About />,
-          </PrivateRoute>
-        ),
+        path: 'history',
+        element: 
+        <PrivateRoute>
+          <History/>
+        </PrivateRoute>
       },
       //Admin
       {
-        path: "admin",
+        path: "dashboard",
         element: (
           <PrivateRoute>
             <AdminRoute>
-              <Admin />
+              <Dashboard />
             </AdminRoute>
           </PrivateRoute>
         ),
@@ -85,10 +101,23 @@ const listRoute: RouteObject[] = [
         path: "book",
         element: (
           <PrivateRoute>
+            <AdminRoute>
             <Book />
+            </AdminRoute>
           </PrivateRoute>
         ),
       },
+      {
+        path: 'order/management',
+        element: (
+          <PrivateRoute>
+            <AdminRoute>
+              <OrderManagement/>
+            </AdminRoute>
+          </PrivateRoute>
+        )
+      },
+      
     ],
   },
 ];
