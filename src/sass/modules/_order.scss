@@ -1,0 +1,148 @@
+.order {
+    font-size: 14px;
+    line-height: 28px;
+    background-color: $sub-color-4;
+    padding: 15px 10px;
+    // display: flex;
+    // justify-content: flex-start;
+    gap: 20px;
+    max-height: 100vh;
+
+    .order__header {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        padding: 15px;
+    }
+
+
+    .order__body {
+        display: flex;
+        justify-content: flex-start;
+
+        .order-left-col {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            padding: 0 5px;
+            background-color: $sub-color-4;
+
+            width: 75%;
+            border-radius: 5px;
+            min-height: 75vh;
+
+            .order-row {
+                background-color: white;
+                border-radius: 5px;
+                padding: 5px;
+
+                .order-row__item {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 5px;
+
+                    .main-text {
+                        width: 300px;
+                    }
+
+                    .number-data {
+                        width: 500px;
+                        display: flex;
+                        justify-content: space-between;
+
+                        .total-price {
+                            width: 200px;
+                        }
+                    }
+
+                    .remove {
+                        cursor: pointer;
+                        color: red;
+                    }
+                }
+            }
+
+        }
+
+        .order-right-col {
+            max-height: 300px;
+            position: relative;
+            padding: 5px;
+            width: calc(100% - 75%);
+            background-color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .order-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 5px;
+
+                //Phase 1
+                .title {
+                    font-weight: bold;
+                }
+
+                .temporary-total {
+                    font-style: italic;
+                    font-weight: bold;
+                }
+
+                .final-total {
+                    font-weight: 900;
+                }
+
+
+            }
+
+            .order-row-phase2 {
+                padding: 5px;
+
+                .order__form_bloc{
+                    .ant-form-item-row{
+                        justify-content: flex-end;
+                    }
+                }
+            }
+
+            .buy-btn {
+                margin-top: auto;
+                width: 100%;
+
+                .button {
+                    padding: 5px;
+                    font-weight: 500;
+                    font-size: 14px;
+                    line-height: 150%;
+                    color: rgb(10, 104, 255);
+                    border: 1px solid rgb(10, 104, 255);
+                    width: 100%;
+
+                }
+
+                .button:hover {
+                    padding: 5px;
+                    background-color: rgb(10, 104, 255);
+                    border-radius: 4px;
+                    color: $main-color;
+                    width: 100%;
+
+                }
+            }
+        }
+    }
+}
+
+
+.order-management {
+    .customTable {
+        .searchBox__field{
+            display: none;
+        }
+        .ant-table-title{
+            display: none;
+        }
+    }
+}

@@ -22,8 +22,8 @@ const CustomDrawer = ({ columns, data, onToggleDrawer }: ICustomDrawer) => {
   useEffect(() => {
     if (detailViewData) {
       //Thumbnail is the first image of slider
-      let imgThumbnail = {};
-      let imgSlider: any[] = [];
+        let imgThumbnail = {};
+        let imgSlider: any[] = [];
       
       if (detailViewData?.thumbnail) {
         imgThumbnail = {

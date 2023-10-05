@@ -7,8 +7,8 @@ const AuthLayout = () => {
     <>
       <div className="layout-app">
         <div className="layout-app__content">
-          {useAppSelector((state) => state.global.loading) && <Loading />}
           <div className="layout-app__content-showing">
+          {useAppSelector((state) => state.global.loading) && <Loading />}
             <Outlet />
           </div>
         </div>

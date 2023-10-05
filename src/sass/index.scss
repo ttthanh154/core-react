@@ -7,8 +7,12 @@
 @import './common/loading';
 @import './common/notfound';
 @import './common/customTable';
+@import './common/global';
 
 // modules
 @import './modules/counter';
 @import './modules/register';
 @import './modules/home';
+@import './modules/detailBook';
+@import './modules/order';
+@import './modules/history';

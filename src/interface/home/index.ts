@@ -1,1 +1,1 @@
-export type { IRatingRate } from "./home.ts";
+export type { IRatingRate,IImagesGallery } from "./home.ts";

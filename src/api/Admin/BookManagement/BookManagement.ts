@@ -1,15 +1,20 @@
 import { funcUtils } from "@utils/hook";
 import customAxios from "@utils/customAxios";
 import { ICustomDesignedResponse } from "@interface/customAxios";
-import { IUserFieldType } from "@interface/user/user";
 import { IBookFields } from "@interface/book";
 
 const version: string = import.meta.env.VITE_APP_VERSION_API;
 const apiUrl: string = `${version}`;
 const BookManagementApi = {
-  getWithPaginate: (params: string) => {
+  getWithPaginate: (params: string | null) => {
     return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
       `${apiUrl}/book?${params}`,
+      // funcUtils.AuthHeader()
+    );
+  },
+  getOne: (id: string | null) => {
+    return customAxios.get<ICustomDesignedResponse, ICustomDesignedResponse>(
+      `${apiUrl}/book/${id}`,
       // funcUtils.AuthHeader()
     );
   },
