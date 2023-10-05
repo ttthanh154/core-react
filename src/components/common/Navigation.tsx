@@ -31,11 +31,11 @@ const Navigation = (props: any) => {
   const { Content, Footer, Sider } = Layout;
   const userInfo = useAppSelector((state) => state.user.user.role);
   const items: MenuItem[] = [
-    getItem(<Link to={"/"}>Dashboard</Link>, "1", <PieChartOutlined />),
-    getItem(<Link to={"/user"}>Manage Users</Link>, "sub1", <UserOutlined />),
-    getItem(<Link to={"book"}>Manage Books</Link>, "sub2", <BookOutlined />),
+    getItem(<Link to={"/"}>Bảng thống kê</Link>, "1", <PieChartOutlined />),
+    getItem(<Link to={"/user"}>Quản lý người dùng</Link>, "sub1", <UserOutlined />),
+    getItem(<Link to={"book"}>Quản lý sách</Link>, "sub2", <BookOutlined />),
     getItem(
-      <Link to={"order/management"}>Manage Orders</Link>,
+      <Link to={"order/management"}>Quản lý đơn hàng</Link>,
       "sub3",
       <PaperClipOutlined />
     ),
