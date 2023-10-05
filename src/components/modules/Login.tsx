@@ -20,7 +20,7 @@ const Login = () => {
         localStorage.setItem("role", data.user.role);
         dispatch(login(data.user));
         const userRole = localStorage.getItem("role");
-        userRole === "ADMIN" ? navigate("/admin") : navigate("/");
+        userRole === "ADMIN" ? navigate("/dashboard") : navigate("/");
 
         funcUtils.notify("Đăng nhập tài khoản thành công", "success");
       }

@@ -40,7 +40,6 @@ const CustomTable = (props: ICustomTableProps) => {
     return (
       <>
         <div className="table__header-title">
-          <span>Danh sách người dùng</span>
           <Space>
             <Button
               type="primary"
