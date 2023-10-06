@@ -119,14 +119,14 @@ const BookDetail = () => {
                 </div>
               </div>
               <div className="book__order-btn">
-                <button
+                {/* <button
                   className="order-btn-1"
                   // onClick={() => {
                   //   console.log("Mua ngay: ",quantity);
                   // }}
                 >
                   Mua ngay
-                </button>
+                </button> */}
                 <button
                   className="order-btn-2"
                   onClick={() => handleAddToCart(quantity, bookData)}
